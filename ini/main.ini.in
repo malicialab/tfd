@@ -1,0 +1,103 @@
+; Main configuration file for TFD
+
+[general]
+
+; Set to 'yes' if you want to start logging instructions to the trace file 
+;   only after some tainted data has been received by the process
+trace_only_after_first_taint = no
+
+; When set to 'yes' the operands that are both read and written are split
+;   into two separate operands in the instruction.
+;   Also, the value of the operands that are written is taken after the 
+;   instruction has executed, rather than before
+write_ops_at_insn_end = no
+
+; Set to 'process' if you want a snapshot of the process to be taken 
+;   just after the first trace instruction is collected
+; Set to 'system' if you want a system snapshot to be taken 
+;   just after the first trace instruction is collected
+save_state_at_trace_start =
+
+; Set to 'process' if you want a snapshot of the process to be taken 
+;   when the trace is stopped
+; Set to 'system' if you want a system snapshot to be taken 
+;   when the trace is stopped
+save_state_at_trace_stop =
+
+[tracing]
+
+; Set to 'yes' if you want to write only tainted instructions into the 
+;   trace file
+tracing_tainted_only = no
+
+; Set to 'yes' if you want to write only instructions from the same thread
+; into the trace file. The first instruction in the trace decides which
+; thread we are recording.
+tracing_single_thread_only = no
+
+; Set to 'yes' if you want to include kernel instructions into the 
+;   trace file. By default only user-level instructions are included
+tracing_kernel = no
+
+; Set to 'yes if you want to include kernel instructions that access
+;   user memory into the trace
+tracing_kernel_partial = no
+
+; Set to 'yes' if you want to include tainted kernel instructions
+;   into the trace
+tracing_kernel_tainted = no
+
+[detect]
+
+; Each of the following defines an action to take 
+; when the error condition is detected during execution
+; Valid actions are:
+;   'none' to do nothing
+;   'stoptracing' to stop the trace
+;   'stopvm' to stop the VM
+;   'terminate' to quit QEMU
+; Any other value is interpreted as 'none'
+
+; Change to act when a memory exception is raised  
+;   (i.e., KiUserExceptionDispatcher)
+detect_memory_exception = none
+
+; Change to act when a null pointer is dereferenced
+detect_null_pointer = none
+
+; Change to act when the traced process exits
+detect_process_exit = stoptracing
+
+; Change to act when the EIP register becomes tainted
+detect_tainted_eip = none
+
+[network]
+
+; Set to 'yes' if you want received dns packets not to be tainted
+ignore_dns = no
+
+; Filter options are used to taint only a subset of the data received 
+;   over the network, rather than all data 
+
+; Transport protocol. Has to be 'tcp' or 'udp'
+filter_transport = 
+
+; Source port. Needs filter_transport to be set
+filter_sport = 
+
+; Destination port. Needs filter_transport to be set 
+filter_dport = 
+
+; Source address
+filter_saddr = 
+
+; Destination address
+filter_daddr = 
+
+[function hooks]
+;file to use for hook configuration
+plugin_ini = TFD_PATH/ini/hook_plugin.ini
+
+; directory containing hook files
+plugin_directory = TFD_PATH/hooks
+
